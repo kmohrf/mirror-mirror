@@ -1,0 +1,40 @@
+{
+  "name": "mirror-mirror",
+  "version": "0.1.0",
+  "main": "mirror-mirror.js",
+  "scripts": {
+    "start": "babel-node mirror-mirror.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Konrad Mohrfeldt <konrad.mohrfeldt@farbdev.org>",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "bootswatch": "^3.3.7",
+    "child-process-promise": "^2.1.3",
+    "commander": "^2.9.0",
+    "forms": "^1.3.0",
+    "koa": "^2.0.0",
+    "koa-better-body": "^3.0.2",
+    "koa-better-router": "^2.1.1",
+    "koa-bodyparser": "^4.0.0",
+    "koa-mount": "^2.0.0",
+    "koa-passport": "^2.2.2",
+    "koa-router": "^7.0.1",
+    "koa-session-minimal": "^3.0.2",
+    "koa-static": "^3.0.0",
+    "koa-views": "^5.2.1",
+    "lodash": "^4.16.4",
+    "mkdirp": "^0.5.1",
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1",
+    "rimraf": "^2.5.4",
+    "sequelize": "^3.24.4",
+    "sqlite3": "^3.1.6",
+    "standard": "^8.6.0",
+    "tmp": "^0.0.31",
+    "twig": "^0.10.3"
+  }
+}
