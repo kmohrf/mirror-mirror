@@ -1,5 +1,6 @@
 {
   "name": "mirror-mirror",
+  "description": "a web service for synchronizing git repositories",
   "version": "1.0.0",
   "main": "mirror-mirror.js",
   "scripts": {
