@@ -1,0 +1,33 @@
+<header class="page-header">
+    <h1 id="tables">{{ list.name }}</h1>
+    <div class="btn-toolbar">
+        <a href="/app/{{ list.slug }}/new" class="btn btn-primary">New {{ list.singleName }}</a>
+    </div>
+</header>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            {% if list.keys %}
+                {% for key, name in list.keys %}
+                    <th>{{ name }}</th>
+                {% endfor %}
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in list.items %}
+            <tr id="id-{{ item.id }}">
+                <td>
+                    <a href="/app/{{ list.slug }}/{{ item.id }}">#{{ item.id }}</a>
+                </td>
+                {% if list.keys %}
+                    {% for key, name in list.keys %}
+                        <td>{{ item[key] }}</td>
+                    {% endfor %}
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
