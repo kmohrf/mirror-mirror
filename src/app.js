@@ -16,7 +16,8 @@ const defaultConfig = {
   db: {
     url: `sqlite://`,
     options: {
-      pool: {max: 5, min: 0, idle: 10000}
+      pool: {max: 5, min: 0, idle: 10000},
+      storage: `${process.cwd()}/run/mirror-mirror.sqlite3`
     }
   }
 }
