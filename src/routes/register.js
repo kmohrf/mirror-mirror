@@ -13,7 +13,7 @@ async function registrationHandler (Model, ctx) {
     return await formSubmit(form, ctx.request.body)
             .then(async (form) => {
               await Model.create(form.data)
-              return ctx.redirect(`/app`)
+              return ctx.redirect(`/login`)
             }, formError(ctx, 'register'))
             .catch(allLost(ctx, '/'))
   }
