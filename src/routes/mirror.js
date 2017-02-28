@@ -20,10 +20,20 @@ export default function (router, persistence, repositoryDir) {
         startedOn: new Date(),
         userId: mirror.userId
       })
-      syncModel.wasSuccessful = !!await sync(mirror, repositoryDir)
-      syncModel.finishedOn = new Date()
-      await syncModel.save()
-      ctx.body = 'OK'
+
+      try {
+        await sync(mirror, repositoryDir)
+        syncModel.wasSuccessful = true
+        ctx.body = 'OK'
+      } catch (e) {
+        syncModel.wasSuccessful = false
+        syncModel.error = e.message.trim()
+        console.error(e.stack)
+        ctx.body = 'FAIL'
+      } finally {
+        syncModel.finishedOn = new Date()
+        await syncModel.save()
+      }
     } else {
       ctx.body = 'FAIL'
     }

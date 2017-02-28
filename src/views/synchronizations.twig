@@ -5,6 +5,13 @@
         <h1 id="tables">Synchronizations</h1>
     </header>
 
+    <div class="error-container clearfix hidden" id="error-container">
+        <pre id="error-target"></pre>
+        <div class="form-actions pull-right">
+            <button class="btn btn-default" type="button" onclick="document.getElementById('error-container').classList.add('hidden')">Close</button>
+        </div>
+    </div>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -27,9 +34,10 @@
                             <i>✅</i>
                         </span>
                     {% else %}
-                        <span class="status status-failure">
+                        <button type="button" class="status status-failure" onclick="document.getElementById('error-target').innerHTML = document.getElementById('item-{{ item.id }}-error').innerHTML; document.getElementById('error-container').classList.remove('hidden'); window.scrollTo(0, 0)">
                             <i>⨯</i>
-                        </span>
+                        </button>
+                        <div class="hidden" id="item-{{ item.id }}-error">{{ item.error }}</div>
                     {% endif %}
                 </td>
                 <td>

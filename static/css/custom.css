@@ -63,6 +63,7 @@ main {
     border-radius: 50%;
     color: white;
     font-size: 1.25em;
+    border: none;
 }
 
 .status i {
@@ -81,4 +82,12 @@ main {
 .status-failure {
     background-color: #e51c23;
     font-size: 1.5em;
+}
+
+.error-container {
+    margin-bottom: 30px;
+}
+
+.error-container pre {
+    white-space: pre-wrap;
 }

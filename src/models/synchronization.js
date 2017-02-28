@@ -8,6 +8,7 @@ export default function (sequelize, Mirror) {
     startedOn: { type: Sequelize.DATE },
     finishedOn: { type: Sequelize.DATE },
     wasSuccessful: { type: Sequelize.BOOLEAN },
+    error: { type: Sequelize.TEXT },
     duration: {
       type: new Sequelize.VIRTUAL(),
       get: function () {

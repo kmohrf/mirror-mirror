@@ -41,9 +41,6 @@ async function fetch (repo, targetDirectory) {
     } else {
       await exec(`${sshEnv(keyFile)} git clone --mirror "${repo.url}" "${repoDir}"`)
     }
-  } catch (e) {
-    console.error(e.stderr)
-    return null
   } finally {
     await keyFile.remove()
   }
@@ -58,9 +55,6 @@ async function push (repo, repoDir, targetDirectory) {
   try {
     const command = `cd "${repoDir}"; ${sshEnv(keyFile)} git push --mirror "${repo.url}"`
     await exec(command)
-  } catch (e) {
-    console.error(e.stderr)
-    return false
   } finally {
     await keyFile.remove()
   }
@@ -73,5 +67,5 @@ export async function sync (mirror, repositoryDir) {
   const srcRepo = await mirror.getSourceRepository()
   const destRepo = await mirror.getTargetRepository()
   const srcRepoDir = await fetch(srcRepo, repositoryDir)
-  return srcRepoDir && await push(destRepo, srcRepoDir, repositoryDir)
+  return await push(destRepo, srcRepoDir, repositoryDir)
 }
