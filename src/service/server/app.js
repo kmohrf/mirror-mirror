@@ -6,7 +6,7 @@ import passport from 'koa-passport'
 import View from 'koa-views'
 import staticFiles from 'koa-static'
 import mount from 'koa-mount'
-import Twig from 'twig'
+import renderer from './renderer'
 import { authorizeSession } from '../../util/security'
 
 export default function (config, router, sessionStore, User) {
@@ -32,11 +32,7 @@ export default function (config, router, sessionStore, User) {
   app.use(View(config.views, {
     extension: 'twig',
     engineSource: {
-      twig: function render (path, options) {
-        return new Promise((resolve, reject) => {
-          Twig.renderFile(path, options, (err, html) => (err && reject(err)) || resolve(html))
-        })
-      }
+      twig: renderer
     }
   }))
 
