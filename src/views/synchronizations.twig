@@ -8,7 +8,7 @@
     <div class="error-container clearfix hidden" id="error-container">
         <pre id="error-target"></pre>
         <div class="form-actions pull-right">
-            <button class="btn btn-default" type="button" onclick="document.getElementById('error-container').classList.add('hidden')">Close</button>
+            <button class="btn btn-default" type="button" data-purpose="hide-error">Close</button>
         </div>
     </div>
 
@@ -20,6 +20,7 @@
                 <th>Mirror</th>
                 <th>Started On</th>
                 <th>Duration</th>
+                <th>Errors</th>
             </tr>
         </thead>
         <tbody>
@@ -34,10 +35,9 @@
                             <i>✅</i>
                         </span>
                     {% else %}
-                        <button type="button" class="status status-failure" onclick="document.getElementById('error-target').innerHTML = document.getElementById('item-{{ item.id }}-error').innerHTML; document.getElementById('error-container').classList.remove('hidden'); window.scrollTo(0, 0)">
+                        <span class="status status-failure">
                             <i>⨯</i>
-                        </button>
-                        <div class="hidden" id="item-{{ item.id }}-error">{{ item.error }}</div>
+                        </span>
                     {% endif %}
                 </td>
                 <td>
@@ -51,8 +51,21 @@
                 </td>
                 <td>{{ item.startedOn | calendar }}</td>
                 <td>{{ item.duration | duration }}</td>
+                <td>
+                    {% if not item.wasSuccessful %}
+                        <div class="hidden" id="item-{{ item.id }}-error">{{ item.error }}</div>
+                        <button type="button" class="btn btn-danger btn-xs" data-purpose="show-error" data-id="{{ item.id }}">
+                            Show Errors
+                        </button>
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <script src="/static/js/delegate.js"></script>
+    <script src="/static/js/sync.js"></script>
 {% endblock %}

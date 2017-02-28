@@ -16,6 +16,7 @@
     "bootswatch": "^3.3.7",
     "child-process-promise": "^2.1.3",
     "commander": "^2.9.0",
+    "delegate": "^3.1.1",
     "forms": "^1.3.0",
     "koa": "^2.0.0",
     "koa-better-body": "^3.0.2",

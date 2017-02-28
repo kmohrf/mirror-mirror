@@ -8,7 +8,8 @@ const defaultConfig = {
     session: `${process.cwd()}/run/sessions.json`,
     staticFiles: {
       '/static': `${__dirname}/../static`,
-      '/static/css': `${__dirname}/../node_modules/bootswatch/paper`
+      '/static/css': `${__dirname}/../node_modules/bootswatch/paper`,
+      '/static/js': `${__dirname}/../node_modules/delegate/dist`
     }
   },
   repositoryDir: `${process.cwd()}/run/repositories`,
