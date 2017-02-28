@@ -26,6 +26,8 @@ export default options => {
   const config = defaults(options.config, defaultConfig)
   container.load(config)
   container.compile()
-  container.services.server.app.start()
-  return container
+  return {
+    container,
+    start: container.services.server.app.start
+  }
 }

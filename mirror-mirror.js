@@ -33,4 +33,5 @@ command
 const config = command.config ? require(path.resolve(command.config)).default : {}
 
 // initialize application
-App({ config })
+const app = App({ config })
+app.start()
