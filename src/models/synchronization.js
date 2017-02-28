@@ -7,7 +7,13 @@ export default function (sequelize, Mirror) {
     targetUrl: { type: Sequelize.STRING },
     startedOn: { type: Sequelize.DATE },
     finishedOn: { type: Sequelize.DATE },
-    wasSuccessful: { type: Sequelize.BOOLEAN }
+    wasSuccessful: { type: Sequelize.BOOLEAN },
+    duration: {
+      type: new Sequelize.VIRTUAL(),
+      get: function () {
+        return this.finishedOn.getTime() - this.startedOn.getTime()
+      }
+    }
   })
 
   Synchronization.belongsTo(Mirror, { as: 'mirror' })
