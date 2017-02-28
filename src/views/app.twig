@@ -21,6 +21,9 @@
                     <li>
                         <a href="/app/mirrors">Mirrors</a>
                     </li>
+                    <li>
+                        <a href="/app/synchronizations">Synchronizations</a>
+                    </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -44,7 +47,7 @@
         <p>
             Mirror-Mirror syncs <a href="/app/mirrors"><strong>{{ collections.mirror.count }} Mirrors</strong></a>
             for you, with a total of <a href="/app/repositories"><strong>{{ collections.repository.count }} Repositories</strong></a>.
-            Up until now we completed <strong>{{ collections.synchronization.count }} synchronizations</strong>.
+            Up until now we completed <a href="/app/synchronizations"><strong>{{ collections.synchronization.count }} synchronizations</strong></a>.
         </p>
     </div>
 {% endblock %}

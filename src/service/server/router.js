@@ -7,6 +7,7 @@ import list from '../../routes/list'
 import edit from '../../routes/edit'
 import app from '../../routes/app'
 import mirror from '../../routes/mirror'
+import syncs from '../../routes/synchronizations'
 
 export default function (persistence, repositoryDir) {
   const router = Router().loadMethods()
@@ -20,6 +21,7 @@ export default function (persistence, repositoryDir) {
   edit(router, persistence)
   app(router, persistence)
   mirror(router, persistence, repositoryDir)
+  syncs(router, persistence)
 
   return router
 }
