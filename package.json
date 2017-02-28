@@ -1,7 +1,7 @@
 {
   "name": "mirror-mirror",
   "description": "a web service for synchronizing git repositories",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "mirror-mirror.js",
   "scripts": {
     "start": "babel-node mirror-mirror.js",
