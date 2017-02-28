@@ -36,3 +36,20 @@ main {
 .jumbotron {
     margin-top: 30px;
 }
+
+.logo {
+    max-height: 110px;
+    margin-right: 3em;
+}
+
+.page-header-left {
+    justify-content: flex-start;
+}
+
+.page-header small {
+    display: block;
+    line-height: 1.2em;
+    margin-top: .2em;
+    font-size: 50%;
+    max-width: 17em;
+}
