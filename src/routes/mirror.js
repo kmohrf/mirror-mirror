@@ -18,7 +18,7 @@ export default function (router, persistence, repositoryDir) {
         sourceUrl: mirror.sourceRepository.url,
         targetUrl: mirror.targetRepository.url,
         startedOn: new Date(),
-        userId: ctx.state.user.id
+        userId: mirror.userId
       })
       syncModel.wasSuccessful = !!await sync(mirror, repositoryDir)
       syncModel.finishedOn = new Date()
