@@ -8,8 +8,8 @@ quite some time.
 
 ## Configuration
 
-Mirror-Mirror should just start via `start.sh` after you installed the
-projects dependencies via
+Mirror-Mirror should just start via `npm start` or `yarn start` after 
+you installed the projects dependencies via
 
 ```sh
 npm install
@@ -23,23 +23,17 @@ user data in SQLite and repositories are created in a separate
 `repository` directory.
 
 If you want to override any of the application settings have
-a look at the `src/app.js` file to see which options are 
+a look at the `src/config.js` file to see which options are 
 available. A basic configuration file would look like this: 
 
 ```js
 // config.js
 
-export default {
+module.exports = {
   // your options similar to those found in src/app.js
 }
 ```
 
-In order to run Mirror-Mirror with the your new config file use the
-`--config` option. If you saved your config to a file called
-`config.js` you’d execute the following command:
-
-```sh
-./start.sh --config config.js
-```
+Place the `config.js` file in your working directory to use it.
 
 That’s it :)

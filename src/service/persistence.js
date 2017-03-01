@@ -9,7 +9,7 @@ export default function (config, encoder) {
   const persistence = Persistence()
   const models = persistence.models
 
-  persistence.connect(config.url, config.options || {})
+  persistence.connect(config)
 
   models.PrivateKey = PrivateKey(persistence.adapter)
   models.Repository = Repository(persistence.adapter, models.PrivateKey)
