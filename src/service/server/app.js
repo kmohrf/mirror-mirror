@@ -34,7 +34,7 @@ export default function (config, router, sessionStore, renderer, User) {
       twig: renderer
     }
   }))
-  app.use(function(ctx, next) {
+  app.use(function (ctx, next) {
     renderer.inject({ request: ctx.request })
     return next()
   })
