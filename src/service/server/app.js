@@ -6,10 +6,9 @@ import passport from 'koa-passport'
 import View from 'koa-views'
 import staticFiles from 'koa-static'
 import mount from 'koa-mount'
-import renderer from './renderer'
 import { authorizeSession } from '../../util/security'
 
-export default function (config, router, sessionStore, User) {
+export default function (config, router, sessionStore, renderer, User) {
   const app = new Koa()
 
     // trust proxies
@@ -35,6 +34,10 @@ export default function (config, router, sessionStore, User) {
       twig: renderer
     }
   }))
+  app.use(function(ctx, next) {
+    renderer.inject({ request: ctx.request })
+    return next()
+  })
 
     // enable authentication
   app.use(passport.initialize())
@@ -55,6 +58,7 @@ export default function (config, router, sessionStore, User) {
 
   return {
     start: () => {
+      router._start()
       app.listen(config.port)
       console.info(`application started on port ${config.port}`)
     }

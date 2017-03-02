@@ -4,13 +4,7 @@ export default function (sequelize, Repository) {
   const Mirror = sequelize.define('mirror', {
     id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: Sequelize.STRING },
-    uuid: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV1 },
-    tokenUrl: {
-      type: new Sequelize.VIRTUAL(),
-      get: function () {
-        return `/mirror/${this.uuid}`
-      }
-    }
+    uuid: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4 }
   })
 
   Mirror.belongsTo(Repository, { as: 'sourceRepository' })
@@ -21,8 +15,7 @@ export default function (sequelize, Repository) {
       name: 'Mirrors',
       singleName: 'Mirror',
       keys: {
-        name: 'Name',
-        tokenUrl: 'Trigger URL'
+        name: 'Name'
       }
     }
   }

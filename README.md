@@ -23,8 +23,9 @@ user data in SQLite and repositories are created in a separate
 `repository` directory.
 
 If you want to override any of the application settings have
-a look at the `src/config.js` file to see which options are 
-available. A basic configuration file would look like this: 
+a look at the `defaultConfig` constant you’ll find in the
+`src/config.js` file to see which options are available. 
+A basic configuration file would look like this: 
 
 ```js
 // config.js
@@ -34,6 +35,8 @@ module.exports = {
 }
 ```
 
-Place the `config.js` file in your working directory to use it.
+Place the `config.js` file in your working directory to use it or use
+the `MIRRORMIRROR_CONFIG` environment variable to override the default
+path. `MIRRORMIRROR_CONFIG` must be an absolute path.
 
 That’s it :)

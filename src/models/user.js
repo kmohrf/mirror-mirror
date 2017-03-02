@@ -11,7 +11,7 @@ export default function (sequelize, encoder, userModels) {
         this.setDataValue('password', encoder(password, this.salt))
       }
     },
-    salt: { type: Sequelize.STRING, defaultValue: Sequelize.UUIDV1 }
+    salt: { type: Sequelize.STRING, defaultValue: Sequelize.UUIDV4 }
   })
 
   for (const model of userModels) {

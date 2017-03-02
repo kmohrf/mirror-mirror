@@ -1,5 +1,5 @@
-export default function (router, persistence) {
-  const { Synchronization, Mirror } = persistence.models
+export default function (router, container) {
+  const { Synchronization, Mirror } = container.get('persistence.manager').models
 
   router.get('/app/synchronizations', async function (ctx) {
     const syncs = await Synchronization.findAll({

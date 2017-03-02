@@ -1,10 +1,13 @@
 import forms, { fields, widgets } from 'forms'
 import layout from './_layout'
 
-export default () => {
+export default (key) => {
   const form = forms.create({
     name: fields.string({ required: true }),
-    content: fields.string({ required: true, widget: widgets.textarea({ rows: 6 }) })
+    privateKey: fields.string({
+      required: true,
+      widget: widgets.textarea({ rows: 6, readonly: !!key.id })
+    })
   })
 
   layout(form)

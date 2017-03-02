@@ -1,17 +1,23 @@
-import { stat, writeFile, unlink } from 'fs'
+import { stat } from 'fs'
 import mkdir from 'mkdirp'
-import { exec } from 'child-process-promise'
 import Q from 'q'
+import spawn from './spawn'
 
-function sshEnv (keyFile) {
-  return `GIT_SSH_COMMAND="ssh -i '${keyFile.path}' -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"`
+const git = (key, args, opts) => {
+  return spawn('git', args, Object.assign({}, opts, {
+    env: {
+      GIT_SSH_COMMAND: `ssh -i '${key}' -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no`
+    }
+  }))
 }
 
-async function createDir (dir) {
-  return await Q.nfcall(mkdir, dir)
+const createDir = async dir => {
+  if (!await existsDir(dir)) {
+    return await Q.nfcall(mkdir, dir)
+  }
 }
 
-async function existsDir (dir) {
+const existsDir = async dir => {
   try {
     const stats = await Q.nfcall(stat, dir)
     return stats.isDirectory()
@@ -20,52 +26,44 @@ async function existsDir (dir) {
   }
 }
 
-async function tempKey (key, targetDirectory) {
-  const keyFile = `${targetDirectory}/key:${key.id}`
-  await Q.nfcall(writeFile, keyFile, key.content, { encoding: 'utf-8', mode: 0o600 })
-  return {
-    path: keyFile,
-    remove: () => Q.nfcall(unlink, keyFile)
-  }
-}
+function RepositoryIO (keyIO, targetDirectory) {
+  async function fetch (repo) {
+    const repoDir = `${targetDirectory}/repo:${repo.id}`
+    const repoExists = await existsDir(repoDir)
+    const key = await repo.getAccessKey()
 
-async function fetch (repo, targetDirectory) {
-  const repoDir = `${targetDirectory}/repo:${repo.id}`
-  const repoExists = await existsDir(repoDir)
-  const key = await repo.getAccessKey()
-  const keyFile = await tempKey(key, targetDirectory)
+    await keyIO.storeTemp(key, async keyFile => {
+      if (repoExists) {
+        await git(keyFile, ['remote', 'update', 'origin'], { cwd: repoDir })
+      } else {
+        await git(keyFile, ['clone', '--mirror', repo.url, repoDir])
+      }
+    })
 
-  try {
-    if (repoExists) {
-      await exec(`cd "${repoDir}"; ${sshEnv(keyFile)} git remote update origin`)
-    } else {
-      await exec(`${sshEnv(keyFile)} git clone --mirror "${repo.url}" "${repoDir}"`)
-    }
-  } finally {
-    await keyFile.remove()
+    return repoDir
   }
 
-  return repoDir
-}
-
-async function push (repo, repoDir, targetDirectory) {
-  const key = await repo.getAccessKey()
-  const keyFile = await tempKey(key, targetDirectory)
-
-  try {
-    const command = `cd "${repoDir}"; ${sshEnv(keyFile)} git push --mirror "${repo.url}"`
-    await exec(command)
-  } finally {
-    await keyFile.remove()
+  async function push (srcRepoDir, destRepo) {
+    const key = await destRepo.getAccessKey()
+    await keyIO.storeTemp(key, async keyFile => {
+      await git(keyFile, ['push', '--mirror', destRepo.url], { cwd: srcRepoDir })
+    })
+    return true
   }
 
-  return true
+  return { fetch, push }
 }
 
-export async function sync (mirror, repositoryDir) {
-  await createDir(`${repositoryDir}`)
-  const srcRepo = await mirror.getSourceRepository()
-  const destRepo = await mirror.getTargetRepository()
-  const srcRepoDir = await fetch(srcRepo, repositoryDir)
-  return await push(destRepo, srcRepoDir, repositoryDir)
+export default function MirrorControl (workingDirectory, keyIO) {
+  const repoIO = RepositoryIO(keyIO, workingDirectory)
+
+  async function sync (mirror, reverse = false) {
+    await createDir(`${workingDirectory}`)
+    const srcRepo = await mirror.getSourceRepository()
+    const destRepo = await mirror.getTargetRepository()
+    const srcRepoDir = await repoIO.fetch(reverse ? destRepo : srcRepo)
+    return await repoIO.push(srcRepoDir, reverse ? srcRepo : destRepo)
+  }
+
+  return { sync }
 }

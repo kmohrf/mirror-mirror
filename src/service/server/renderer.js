@@ -10,7 +10,7 @@ Twig.extendFilter('calendar', time => {
   return moment(time).calendar()
 })
 
-function path (path, options) {
+function render (path, options) {
   return new Promise((resolve, reject) => {
     return Twig.renderFile(path, options, (err, html) => {
       if (err) {
@@ -22,4 +22,20 @@ function path (path, options) {
   })
 }
 
-export default path
+export default config => {
+  let injectContext = {}
+
+  const renderer = (path, options) => {
+    const response = render(path, Object.assign(
+      options, config.globals, injectContext
+    ))
+    injectContext = {}
+    return response
+  }
+
+  renderer.inject = data => {
+    Object.assign(injectContext, data)
+  }
+
+  return renderer
+}

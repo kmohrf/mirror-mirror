@@ -8,6 +8,6 @@ export default () => {
 
   return {
     container,
-    start: container.services.server.app.start
+    start: container.get('server.app').start
   }
 }

@@ -19,8 +19,8 @@ async function registrationHandler (Model, ctx) {
   }
 }
 
-export default function (router, persistence) {
-  const handler = registrationHandler.bind(null, persistence.models.User)
+export default function (router, container) {
+  const handler = registrationHandler.bind(null, container.get('persistence.manager').models.User)
   router.get('/register', handler)
   router.post('/register', handler)
 }

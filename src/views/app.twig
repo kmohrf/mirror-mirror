@@ -1,46 +1,14 @@
 {% extends "layout.twig" %}
 
 {% block nav %}
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/app">
-                    <img src="/static/img/logo.svg" alt="" role="presentation">
-                    Mirror-Mirror
-                </a>
-            </div>
-
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="/app/private_keys">Private Keys</a>
-                    </li>
-                    <li>
-                        <a href="/app/repositories">Repositories</a>
-                    </li>
-                    <li>
-                        <a href="/app/mirrors">Mirrors</a>
-                    </li>
-                    <li>
-                        <a href="/app/synchronizations">Synchronizations</a>
-                    </li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/logout">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {% include "nav.twig" %}
 {% endblock %}
 
 {% block content %}
     <div class="jumbotron">
         <h1>Oh hi there!</h1>
         <p>
-            Mirror-Mirror is a git repository synchronization service. Start by adding your SSH private keys,
+            Mirror-Mirror is a git repository synchronization service. Start by adding your SSH keys,
             repositores and mirrors. Mirrors provide a Trigger URL. Send a POST request to that URL and
             Mirror-Mirror will start synchronizing.
         </p>

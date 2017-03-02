@@ -2,12 +2,13 @@
 
 /*
  * this file must be es5/node4.x compatible so it can be
- * used by the default node interpreter used by the
+ * loaded by the default node interpreter used by the
  * sequelize cli tool
  */
 
 const path = require('path')
 const _ = require('lodash')
+const pkg = require('../package.json')
 
 function maybeLoad (file) {
   try {
@@ -17,12 +18,14 @@ function maybeLoad (file) {
   }
 }
 
-const userConfig = maybeLoad(path.join(__dirname, '../config.js'))
-const defaultConfig = {
+const cwd = process.cwd()
+const defaultUserConfigPath = path.join(__dirname, '../config.js')
+const envUserConfigPath = _.get(process.env, 'MIRRORMIRROR_CONFIG', false)
+const userConfig = envUserConfigPath ? require(envUserConfigPath) : maybeLoad(defaultUserConfigPath)
+const baseConfig = {
+  pkg,
   server: {
-    port: 3000,
     views: path.join(__dirname, '/views'),
-    session: path.join(process.cwd(), '/run/sessions.json'),
     staticFiles: {
       '/static': path.join(__dirname, '/../static'),
       '/static/css/bootswatch': path.join(__dirname, '/../node_modules/bootswatch/paper'),
@@ -30,15 +33,40 @@ const defaultConfig = {
       '/static/js/clipboard': path.join(__dirname, '/../node_modules/clipboard/dist')
     }
   },
+  twig: {
+    globals: {
+      pkg,
+      menu: {
+        '/app/ssh-keys': 'SSH Keys',
+        '/app/repositories': 'Repositories',
+        '/app/mirrors': 'Mirrors',
+        '/app/synchronizations': 'Synchronizations'
+      }
+    }
+  }
+}
+const defaultConfig = {
+  // origin used when generating absolute urls. null to use origin from request.
+  origin: null,
+  server: {
+    // server port
+    port: 3000,
+    // session storage
+    session: path.join(cwd, '/run/sessions.json')
+  },
+  // ssh key size used when generating ssh keys from the frontend
   sshKeySize: 4096,
-  repositoryDir: process.cwd() + '/run/repositories',
+  // directory where repositories are created when syncing mirrors
+  repositoryDir: path.join(cwd, '/run/repositories'),
+  // settings for encoding passwords. you’re not like to need something else
   password: { iterations: 5000, algorithm: 'sha512' },
+  // database settings. default is a persistent sqlite database
   db: {
-    pool: {max: 5, min: 0, idle: 10000},
+    pool: { max: 5, min: 0, idle: 10000 },
     dialect: 'sqlite',
-    storage: process.cwd() + '/run/mirror-mirror.sqlite3'
+    storage: path.join(cwd, '/run/mirror-mirror.sqlite3')
   }
 }
 
-module.exports = _.defaultsDeep({}, userConfig, defaultConfig)
+module.exports = _.defaultsDeep({}, baseConfig, userConfig, defaultConfig)
 

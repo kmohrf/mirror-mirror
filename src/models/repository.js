@@ -1,13 +1,13 @@
 import Sequelize from 'sequelize'
 
-export default function (sequelize, PrivateKey) {
+export default function (sequelize, SSHKey) {
   const Repository = sequelize.define('repository', {
     id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
     name: Sequelize.STRING,
     url: Sequelize.STRING
   })
 
-  Repository.belongsTo(PrivateKey, { as: 'accessKey' })
+  Repository.belongsTo(SSHKey, { as: 'accessKey' })
 
   Repository.Instance.prototype.toString = function () {
     return this.name

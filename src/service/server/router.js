@@ -1,27 +1,19 @@
+import fs from 'fs'
+import path from 'path'
 import Router from 'koa-better-router'
-import base from '../../routes/base'
-import login from '../../routes/login'
-import logout from '../../routes/logout'
-import register from '../../routes/register'
-import list from '../../routes/list'
-import edit from '../../routes/edit'
-import app from '../../routes/app'
-import mirror from '../../routes/mirror'
-import syncs from '../../routes/synchronizations'
 
-export default function (persistence, repositoryDir) {
+const routesPath = path.resolve(`${__dirname}/../../routes`)
+
+export default container => {
   const router = Router().loadMethods()
 
-    // load routes
-  base(router)
-  login(router)
-  logout(router)
-  register(router, persistence)
-  list(router, persistence)
-  edit(router, persistence)
-  app(router, persistence)
-  mirror(router, persistence, repositoryDir)
-  syncs(router, persistence)
+  router._start = () => {
+    fs.readdirSync(routesPath).forEach(file => {
+      const modulePath = `${routesPath}/${file}`
+      const initializer = require(modulePath).default
+      initializer(router, container)
+    })
+  }
 
   return router
 }

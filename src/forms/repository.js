@@ -5,11 +5,11 @@ import layout from './_layout'
 export default (accessKeys) => {
   const loginForm = forms.create({
     name: fields.string({ required: true }),
-    url: fields.string({ required: true }),
+    url: fields.string({ required: true, label: 'Repository URL' }),
     accessKeyId: fields.number({
       choices: defaultEmpty(accessKeys),
       widget: widgets.select(),
-      label: 'Private Key for Repository Access'
+      label: 'SSH Key for Repository Access'
     })
   })
 
