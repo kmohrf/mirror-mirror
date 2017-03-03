@@ -23,15 +23,16 @@ export default function KeyFileIO (targetDirectory, keySize) {
     return new Promise((resolve, reject) => {
       tmp.file({ dir: targetDirectory }, async function (err, path, fd, cleanup) {
         if (err) reject(err)
+        let result = undefined
 
         try {
           await write(path, key.privateKey, { mode: 0o600 })
-          await callback(path)
+          result = await callback(path)
         } catch (e) {
           reject(e)
         } finally {
           cleanup()
-          resolve()
+          resolve(result)
         }
       })
     })
