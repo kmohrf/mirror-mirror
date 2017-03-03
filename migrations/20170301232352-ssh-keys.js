@@ -31,20 +31,33 @@ function getKeyData (key) {
 
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    return Promise.all([
-      queryInterface.sequelize.query(
-          'SELECT * FROM repositories',
-          { type: Sequelize.QueryTypes.SELECT }
-        ),
-      queryInterface.renameTable('private_keys', 'ssh_keys'),
-      queryInterface.renameColumn('ssh_keys', 'content', 'privateKey'),
-      queryInterface.addColumn('ssh_keys', 'publicKey', Sequelize.TEXT),
-      queryInterface.addColumn('ssh_keys', 'fingerprint', Sequelize.STRING)
-    ])
-      .then(function (data) {
+    return Promise.resolve()
+      .then(function () {
+        return queryInterface.sequelize.query('SELECT * FROM repositories', {
+          type: Sequelize.QueryTypes.SELECT
+        })
+      })
+      .then(function (repositories) {
+        return Promise.resolve()
+          .then(function () {
+            return queryInterface.renameTable('private_keys', 'ssh_keys')
+          })
+          .then(function () {
+            return queryInterface.renameColumn('ssh_keys', 'content', 'privateKey')
+          })
+          .then(function () {
+            return queryInterface.addColumn('ssh_keys', 'publicKey', Sequelize.TEXT)
+          })
+          .then(function () {
+            return queryInterface.addColumn('ssh_keys', 'fingerprint', Sequelize.STRING)
+          })
+          .then(function () {
+            return Promise.resolve(repositories)
+          })
+      })
+      .then(function (repositories) {
         // renameColumn broke the repository table in sqlite
         // see https://github.com/sequelize/sequelize/issues/7078
-        const repositories = data[0]
         return Promise.all(repositories.map(function (repo) {
           return queryInterface.sequelize.query(
             'UPDATE repositories SET accessKeyId = :keyId WHERE id = :id',
@@ -71,10 +84,18 @@ module.exports = {
       })
   },
   down: function (queryInterface) {
-    return Promise.all([
-      queryInterface.renameColumn('ssh_keys', 'privateKey', 'content'),
-      queryInterface.removeColumn('ssh_keys', 'publicKey'),
-      queryInterface.removeColumn('ssh_keys', 'fingerprint')
-    ]).then(queryInterface.renameTable('ssh_keys', 'private_keys'))
+    return Promise.resolve()
+      .then(function () {
+        return queryInterface.renameColumn('ssh_keys', 'privateKey', 'content')
+      })
+      .then(function () {
+        return queryInterface.removeColumn('ssh_keys', 'publicKey')
+      })
+      .then(function () {
+        return queryInterface.removeColumn('ssh_keys', 'fingerprint')
+      })
+      .then(function () {
+        return queryInterface.renameTable('ssh_keys', 'private_keys')
+      })
   }
 }
