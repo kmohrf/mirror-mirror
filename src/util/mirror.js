@@ -6,7 +6,7 @@ import spawn from './spawn'
 const git = (key, args, opts) => {
   return spawn('git', args, Object.assign({}, opts, {
     env: {
-      GIT_SSH_COMMAND: `ssh -i '${key}' -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no`
+      GIT_SSH_COMMAND: `ssh -F /dev/null -i '${key}' -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no`
     }
   }))
 }
