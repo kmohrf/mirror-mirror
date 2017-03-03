@@ -1,14 +1,15 @@
 import Sequelize from 'sequelize'
 
-export default function (sequelize, Mirror) {
+export default function (sequelize) {
   const Synchronization = sequelize.define('synchronization', {
     id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+    description: { type: Sequelize.STRING },
     sourceUrl: { type: Sequelize.STRING },
     targetUrl: { type: Sequelize.STRING },
     startedOn: { type: Sequelize.DATE },
     finishedOn: { type: Sequelize.DATE },
     wasSuccessful: { type: Sequelize.BOOLEAN },
-    error: { type: Sequelize.TEXT },
+    log: { type: Sequelize.TEXT },
     duration: {
       type: new Sequelize.VIRTUAL(),
       get: function () {
@@ -16,8 +17,6 @@ export default function (sequelize, Mirror) {
       }
     }
   })
-
-  Synchronization.belongsTo(Mirror, { as: 'mirror' })
 
   Synchronization.describe = function () {
     return {

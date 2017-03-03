@@ -26,43 +26,85 @@ const existsDir = async dir => {
   }
 }
 
-function RepositoryIO (keyIO, targetDirectory) {
-  async function fetch (repo) {
-    const repoDir = `${targetDirectory}/repo:${repo.id}`
-    const repoExists = await existsDir(repoDir)
+function RepositoryIO (keyIO) {
+  async function fetch (targetDirectory, repo) {
+    const repoExists = await existsDir(targetDirectory)
     const key = await repo.getAccessKey()
 
-    await keyIO.storeTemp(key, async keyFile => {
+    return await keyIO.storeTemp(key, async keyFile => {
       if (repoExists) {
-        await git(keyFile, ['remote', 'update', 'origin'], { cwd: repoDir })
+        return await git(keyFile, ['remote', '--verbose', 'update', 'origin'], { cwd: targetDirectory })
       } else {
-        await git(keyFile, ['clone', '--mirror', repo.url, repoDir])
+        return await git(keyFile, ['clone', '--verbose', '--mirror', repo.url, targetDirectory])
       }
     })
-
-    return repoDir
   }
 
-  async function push (srcRepoDir, destRepo) {
+  async function push (sourceDirectory, destRepo) {
     const key = await destRepo.getAccessKey()
-    await keyIO.storeTemp(key, async keyFile => {
-      await git(keyFile, ['push', '--mirror', destRepo.url], { cwd: srcRepoDir })
+
+    return await keyIO.storeTemp(key, async keyFile => {
+      return await git(keyFile, ['push', '--verbose', '--mirror', destRepo.url], { cwd: sourceDirectory })
     })
-    return true
   }
 
   return { fetch, push }
 }
 
-export default function MirrorControl (workingDirectory, keyIO) {
-  const repoIO = RepositoryIO(keyIO, workingDirectory)
+export default function MirrorControl (workingDirectory, keyIO, Synchronization) {
+  const repoIO = RepositoryIO(keyIO)
 
-  async function sync (mirror, reverse = false) {
-    await createDir(`${workingDirectory}`)
-    const srcRepo = await mirror.getSourceRepository()
-    const destRepo = await mirror.getTargetRepository()
-    const srcRepoDir = await repoIO.fetch(reverse ? destRepo : srcRepo)
-    return await repoIO.push(srcRepoDir, reverse ? srcRepo : destRepo)
+  const repoDir = repo => `${workingDirectory}/repo:${repo.id}`
+  const syncFlow = (reverse, repos) => reverse ? repos.reverse() : repos
+
+  const log = async init => {
+    let result
+    const syncLog = Synchronization.build({
+      startedOn: new Date()
+    })
+
+    try {
+      result = await init(syncLog)
+      syncLog.log = result
+    } catch (e) {
+      syncLog.log = e.message.trim()
+      syncLog.wasSuccessful = false
+    } finally {
+      syncLog.finishedOn = new Date()
+      await syncLog.save()
+    }
+
+    return syncLog
+  }
+
+  const sync = (mirror, reverse = false) => {
+    return log(async syncLog => {
+      await createDir(`${workingDirectory}`)
+      const [srcRepo, destRepo] = syncFlow(reverse, [
+        await mirror.getSourceRepository(),
+        await mirror.getTargetRepository()
+      ])
+      const dir = repoDir(srcRepo)
+      let output = ''
+
+      syncLog.set({
+        description: `${srcRepo.name} → ${destRepo.name}`,
+        sourceUrl: srcRepo.url,
+        targetUrl: destRepo.url,
+        userId: mirror.userId
+      })
+
+      try {
+        output += await repoIO.fetch(dir, srcRepo) + '\n'
+        output += await repoIO.push(dir, destRepo) + '\n'
+        syncLog.wasSuccessful = true
+      } catch(e) {
+        output += e.message.trim() + '\n'
+        syncLog.wasSuccessful = false
+      }
+
+      return output
+    })
   }
 
   return { sync }

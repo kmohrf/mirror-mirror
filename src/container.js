@@ -37,7 +37,7 @@ function Container () {
     const sessionStorage = sessions(config.server.session)
     const routerInstance = router(iface)
     const templateRenderer = renderer(config.twig)
-    const { User } = persistenceManager.models
+    const { User, Synchronization } = persistenceManager.models
 
     register('security.passwordEncoder', encoder)
     register('persistence.manager', persistenceManager)
@@ -47,7 +47,7 @@ function Container () {
     register('server.router', routerInstance)
     register('server.app', app(config.server, routerInstance, sessionStorage, templateRenderer, User))
     register('security.keyIO', keyIO)
-    register('mirror.control', MirrorControl(config.repositoryDir, keyIO))
+    register('mirror.control', MirrorControl(config.repositoryDir, keyIO, Synchronization))
   }
 
   function get (name) {

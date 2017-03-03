@@ -11,44 +11,21 @@ function mirrorSync (models, mirrorCtl) {
   return async ctx => {
     const uuid = ctx.params.uuid
     const reverse = has(ctx.request.query, 'reverse')
-    const mirror = await models.Mirror.findOne({
-      where: { uuid },
-      include: [
-        { model: models.Repository, as: 'sourceRepository' },
-        { model: models.Repository, as: 'targetRepository' }
-      ]
-    })
-
-    const sync = models.Synchronization.build({
-      startedOn: new Date()
-    })
+    const mirror = await models.Mirror.findOne({ where: { uuid } })
 
     if (mirror) {
-      sync.set({
-        mirrorId: mirror.id,
-        sourceUrl: mirror.sourceRepository.url,
-        targetUrl: mirror.targetRepository.url,
-        userId: mirror.userId
-      })
+      const sync = await mirrorCtl.sync(mirror, reverse)
 
-      try {
-        await mirrorCtl.sync(mirror, reverse)
-        sync.wasSuccessful = true
+      if (sync.wasSuccessful) {
         ctx.body = 'OK'
-      } catch (e) {
-        sync.wasSuccessful = false
-        sync.error = e.message.trim()
-        console.error(e.stack)
+      } else {
+        ctx.status = 400
         ctx.body = 'FAIL'
       }
     } else {
-      sync.wasSuccessful = false
-      sync.error = `Unknown Trigger Token "${uuid}"`
-      ctx.body = 'FAIL'
+      ctx.status = 404
+      ctx.body = 'NOT FOUND'
     }
-
-    sync.finishedOn = new Date()
-    await sync.save()
   }
 }
 

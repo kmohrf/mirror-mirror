@@ -15,7 +15,7 @@ const write = (file, content, opts = {}) => Q.nfcall(writeFile, file, content, d
 
 const readFingerprint = async publicKeyFile => {
   const output = await spawn('ssh-keygen', ['-l', '-f', publicKeyFile])
-  return output.stdout.split(' ')[1]
+  return output.split(' ')[1]
 }
 
 export default function KeyFileIO (targetDirectory, keySize) {
@@ -42,7 +42,7 @@ export default function KeyFileIO (targetDirectory, keySize) {
     return new Promise(resolve => {
       storeTemp(key, async function (keyFile) {
         const output = await spawn('ssh-keygen', ['-y', '-f', keyFile])
-        resolve(output.stdout)
+        resolve(output)
       })
     })
   }
