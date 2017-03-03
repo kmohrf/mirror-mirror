@@ -30,7 +30,9 @@ const baseConfig = {
       '/static': path.join(__dirname, '/../static'),
       '/static/css/bootswatch': path.join(__dirname, '/../node_modules/bootswatch/paper'),
       '/static/js/delegate': path.join(__dirname, '/../node_modules/delegate/dist'),
-      '/static/js/clipboard': path.join(__dirname, '/../node_modules/clipboard/dist')
+      '/static/js/clipboard': path.join(__dirname, '/../node_modules/clipboard/dist'),
+      '/static/js/axios': path.join(__dirname, '/../node_modules/axios/dist'),
+      '/static/js/pushjs': path.join(__dirname, '/../node_modules/push.js')
     }
   },
   twig: {

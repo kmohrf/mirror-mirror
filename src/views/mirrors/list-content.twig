@@ -1,7 +1,13 @@
 <td>
     {% set ref = 'mirror-url-' ~ item.id %}
     <code id="{{ ref }}">{{ request.origin }}/mirror/{{ item.uuid }}</code>
-    <button type="button" class="btn btn-primary btn-xs" data-purpose="copy" data-clipboard-target="#{{ ref }}">
+    <button type="button" class="btn btn-default btn-xs" data-purpose="copy" data-clipboard-target="#{{ ref }}">
         Copy URL
+    </button>
+</td>
+<td>
+    <button type="button" class="btn btn-default btn-xs"
+            data-purpose="sync" data-url="{{ request.origin }}/mirror/{{ item.uuid }}" data-name="{{ item.name }}">
+        Sync Now
     </button>
 </td>
