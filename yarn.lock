@@ -2808,6 +2808,10 @@ next-tick@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-0.2.2.tgz#75da4a927ee5887e39065880065b7336413b310d"
 
+node-deb@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/node-deb/-/node-deb-0.6.1.tgz#3ec418be8b70c1cdc1d7d837f46f2007d1987d4b"
+
 node-pre-gyp@^0.6.29, node-pre-gyp@~0.6.31:
   version "0.6.33"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.6.33.tgz#640ac55198f6a925972e0c16c4ac26a034d5ecc9"

@@ -10,7 +10,8 @@
   "main": "mirror-mirror.js",
   "scripts": {
     "start": "sequelize db:migrate && babel-node mirror-mirror.js",
-    "test": "standard src/**/*.js static/**/*.js migrations/*.js mirror-mirror.js"
+    "test": "standard src/**/*.js static/**/*.js migrations/*.js mirror-mirror.js",
+    "deb": "node-deb --no-rebuild --arch $(debian/support/architecture.js) $@ -- migrations run src static mirror-mirror.js"
   },
   "author": "Konrad Mohrfeldt <konrad.mohrfeldt@farbdev.org>",
   "license": "AGPL-3.0",
@@ -53,5 +54,18 @@
     "standard": "^8.6.0",
     "tmp": "^0.0.31",
     "twig": "^0.10.3"
+  },
+  "node_deb": {
+    "init": "systemd",
+    "user": "mirrormirror",
+    "group": "mirrormirror",
+    "start_command": "node_modules/.bin/sequelize db:migrate && node_modules/.bin/babel-node mirror-mirror-js",
+    "extra_files": "./debian/root",
+    "templates": {
+      "default_variables": "debian/templates/default"
+    }
+  },
+  "devDependencies": {
+    "node-deb": "^0.6.1"
   }
 }
