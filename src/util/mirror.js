@@ -98,7 +98,7 @@ export default function MirrorControl (workingDirectory, keyIO, Synchronization)
         output += await repoIO.fetch(dir, srcRepo) + '\n'
         output += await repoIO.push(dir, destRepo) + '\n'
         syncLog.wasSuccessful = true
-      } catch(e) {
+      } catch (e) {
         output += e.message.trim() + '\n'
         syncLog.wasSuccessful = false
       }
