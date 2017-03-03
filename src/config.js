@@ -67,6 +67,18 @@ const defaultConfig = {
     storage: path.join(cwd, '/run/mirror-mirror.sqlite3')
   }
 }
+const envConfig = _.get({
+  development: {
+    db: {
+      logging: console.log
+    }
+  },
+  production: {
+    db: {
+      logging: () => {}
+    }
+  }
+}, _.get(process.env, 'NODE_ENV', 'development'), {})
 
-module.exports = _.defaultsDeep({}, baseConfig, userConfig, defaultConfig)
+module.exports = _.defaultsDeep({}, baseConfig, userConfig, defaultConfig, envConfig)
 
