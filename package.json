@@ -53,5 +53,11 @@
     "standard": "^8.6.0",
     "tmp": "^0.0.31",
     "twig": "^0.10.3"
+  },
+  "node_deb": {
+    "init": "systemd",
+    "user": "mirrormirror",
+    "group": "mirrormirror",
+    "start_command": "node_modules/.bin/sequelize db:migrate && node_modules/.bin/babel-node mirror-mirror-js"
   }
 }
