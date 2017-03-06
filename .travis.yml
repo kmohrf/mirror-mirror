@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+- 4.7.2
+env:
+- CXX=g++-4.8
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+after_success:
+- yarn run deb
+cache:
+  yarn: true
+deploy:
+  provider: releases
+  api_key:
+    secure: HLNw1hIBnP/yt3Olqtw9ikvM/cArAi8h9Gulcg5zuUrvPfQux+Di0ukt/zd88N9p6QmINbxalVIUMWerAelJ/bNTEowpic8oXgD3l7G3/1LHJJsnjre24MkCa3JZnZScZwUh4PZ2dJuydX1Q8HBkoM+NFXqtWkEO9GUNWR7S1v8omQvunTkzaKiDKsGDXgHtMiVOT9zvDOiDNjgGhyxHO6ASr7+D9eYyl4FwPiU7dB6eM/myzjJS3RCrvHGUx+lar9FkDzzGkdBpwD4NJF/NOnaFUQMKJ8ldm1F/sbvKUnO7OhtaoWI2YhaJfbBT4/fDPO9bqEqy0KycvN6WA7jDZqEn7F926zTLLg1TYrOjVBV1bhek+97YKrVtpq4aonUXlPMKafUcUEfUqS4TDQMteaxwm/cxEtAVAbaHoueOBZ14I3EeoGaBOyAunGvqlmDkF6kv5qgYBtytcQjJju1dqPLIVDkHkIPOGsiaEv8vpvpQXmPlHp6HGb9f0F1elE5nlKvnuyYF6bmbekgp/ht73F6H/VJETeMYdZQWJA/gAJ9YjY8YMeBlY23AGIQEnHrZcDTdHSQmaYqNOJvv0j0EvUs39/wnPoBqVcfV6fW4l1ns5iPEc5mpVyV4jesAyKRzrsfw14lq4N7HinhEL6U5Izkmnvc0AvVIgEffw761pqw=
+  file: "*.deb"
+  file_glob: true
+  skip_cleanup: true
+  on:
+    repo: kmohrf/mirror-mirror
+    tags: true
