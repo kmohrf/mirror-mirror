@@ -11,9 +11,7 @@ addons:
     - g++-4.8
 install: npm install
 after_success:
-- yarn run deb
-cache:
-  yarn: true
+- npm run deb
 deploy:
   provider: releases
   api_key:
