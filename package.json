@@ -6,7 +6,7 @@
     "url": "https://github.com/kmohrf/mirror-mirror/issues",
     "email": "konrad.mohrfeldt@farbdev.org"
   },
-  "version": "2.1.0",
+  "version": "2.1.1",
   "main": "mirror-mirror.js",
   "scripts": {
     "start": "sequelize db:migrate && babel-node mirror-mirror.js",
