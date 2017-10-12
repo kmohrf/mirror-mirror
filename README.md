@@ -1,4 +1,6 @@
 # Mirror-Mirror
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkmohrf%2Fmirror-mirror.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkmohrf%2Fmirror-mirror?ref=badge_shield)
+
 
 Mirror-Mirror is a nodejs-based web application that offers an easy
 way to synchronize git repositories. It was created because a similar
@@ -40,3 +42,7 @@ the `MIRRORMIRROR_CONFIG` environment variable to override the default
 path. `MIRRORMIRROR_CONFIG` must be an absolute path.
 
 That’s it :)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkmohrf%2Fmirror-mirror.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkmohrf%2Fmirror-mirror?ref=badge_large)
