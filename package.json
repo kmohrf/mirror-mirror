@@ -48,7 +48,7 @@
     "push.js": "^0.0.12",
     "q": "^1.4.1",
     "rimraf": "^2.5.4",
-    "sequelize": "^3.24.4",
+    "sequelize": "^5.3.0",
     "sequelize-cli": "^2.5.1",
     "sqlite3": "^3.1.6",
     "standard": "^8.6.0",
