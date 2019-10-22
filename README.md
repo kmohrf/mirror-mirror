@@ -6,6 +6,8 @@ feature in GitLab was restricted to the Enterprise-Edition and
 because I wanted to create a server-side nodejs application for
 quite some time.
 
+**NOTE: This software is unmaintained. If you want to take over feel free to contact me or simply fork it.**
+
 ## Configuration
 
 Mirror-Mirror should just start via `npm start` or `yarn start` after 
