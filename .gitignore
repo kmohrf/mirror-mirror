@@ -1,5 +1,3 @@
-node_modules/*
-run/*
-!run/.gitkeep
-/config.js
-*.deb
+/node_modules/
+/run/
+/db.sqlite3

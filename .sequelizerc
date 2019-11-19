@@ -1,9 +1,0 @@
-'use strict'
-
-const config = {}
-config.config = __filename
-config[process.env.NODE_ENV || 'development'] = require('./src/config').db
-
-module.exports = config
-
-

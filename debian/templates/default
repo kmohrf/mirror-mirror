@@ -1,4 +1,0 @@
-# Configuration for the {{ node_deb_package_name }} daemon
-
-export NODE_ENV="production"
-export MIRRORMIRROR_CONFIG="/etc/mirror-mirror/config.js"
